@@ -1,0 +1,152 @@
+## Assignment Part-1
+Q1. Why do we call Python as a general purpose and high-level programming language?
+sol: General purpose because it can be used for a variety of development tasks and not just for specific domain, high level programming as it is object oriented and easily 
+readable by humans.
+
+Q2. Why is Python called a dynamically typed language?
+sol: Python is called dynamically typed language as the variable need not be type mentioned as python automatically detects it.
+
+Q3. List some pros and cons of Python programming language?
+sol: Pros:
+1) Easy to use 2) Easy to integrate 3) Multi-paradigm approach 4) High library support
+Cons:
+1) Slow speed of execution compared to C,C++ 2) Absence from mobile computing and browsers
+
+Q4. In what all domains can we use Python?
+sol: 
+1) Machine learning 
+2) Data Science and data analytics
+3) IOT
+4) Webdesign and gaming
+5) application development
+
+Q5. What are variable and how can we declare them?
+sol: Variable is a name that is reference to an object once an object is assigned a variable we can access the object using the variable.
+example: var = 20, arnold = 24
+
+Q6. How can we take an input from the user in Python?
+sol: input() function
+
+Q7. What is the default datatype of the value that has been taken as an input using input() function?
+sol: String
+
+Q8. What is type casting?
+sol: Type casting means changing the datatype of the variable.
+
+Q9. Can we take more than one input from the user using single input() function? If yes, how? If no, why?
+sol: yes we can more then one input
+example : a, b, c = input("Enter a,b and c: ").split(",")
+
+Q10. What are keywords?
+sol: Keywords in Python are reserved words that can not be used as a variable name, function name, or any other identifier.
+
+Q11. Can we use keywords as a variable? Support your answer with reason.
+sol: no we cannot use keyword as a variable as keywords are already defined terms with pre-determined task or value.
+
+Q12. What is indentation? What's the use of indentaion in Python?
+sol: Indentation is the whitespace used in Python. Indentation is used to create block of statement.
+
+Q13. How can we throw some output in Python?
+sol: print() function
+
+Q14. What are operators in Python?
+sol: Symbols or keywords used to perform certain operations on values or variable are known as operators.
+
+Q15. What is difference between / and // operators?
+sol: / is used for float division and // is used of floor (integer) division.
+
+Q16. Write a code that gives following as an output.
+```
+iNeuroniNeuroniNeuroniNeuron
+```
+sol: print("iNeuroniNeuroniNeuroniNeuron") or print("iNeuron"*3)
+
+Q17. Write a code to take a number as an input from the user and check if the number is odd or even.
+sol: num = float(input("Enter a number: "))
+     if num%2 == 0:
+       print(f"{num} is even")
+     else:
+       print(f"{num} is odd")
+       
+Q18. What are boolean operator?
+sol: True , False , not , and , or are the only built-in Python Boolean operators.
+
+Q19. What will the output of the following?
+```
+1 or 0
+
+0 and 0
+
+True and False and True
+
+1 or 0 or 0
+```
+sol:
+1 or 0 -> 1
+0 and 0 -> 0
+True and False and True -> False
+1 or 0 or 0 -> 1
+
+Q20. What are conditional statements in Python?
+sol: In large projects we have to control the flow of execution of our program and we want to execute some set of statements only if the given condition is satisfied, 
+     and a different set of statements when it’s not satisfied.
+     
+Q21. What is use of 'if', 'elif' and 'else' keywords?
+sol: if = first condition check for the condition.
+
+elif = if "if" is False then elif's condition is checked.
+
+else = else is checked when all the upper condition fails.
+
+Q22. Write a code to take the age of person as an input and if age >= 18 display "I can vote". If age is < 18 display "I can't vote".
+sol: age = input()
+if age >= 18:
+  print("I can vote")
+else:
+  print("I cant't vote")
+  
+ 
+Q23. Write a code that displays the sum of all the even numbers from the given list.
+```
+numbers = [12, 75, 150, 180, 145, 525, 50]
+```
+sol:
+sum=0
+for i in numbers:
+  if(i/2==0):
+   sum = sum + i
+  else:
+   continue
+print(sum)   
+
+Q24. Write a code to take 3 numbers as an input from the user and display the greatest no as output.
+sol:
+x, y, z = input("Enter 3 numbers seprated by comma: ").split(",")
+if int(x) > int(y) and int(x) > int(z):
+  print(f"{x} is greatest")
+elif int(y) > int(z):
+  print(f"{y} is greatest")
+else:
+  print(f"{z} is greatest")
+  
+Q25. Write a program to display only those numbers from a list that satisfy the following conditions
+
+- The number must be divisible by five
+
+- If the number is greater than 150, then skip it and move to the next number
+
+- If the number is greater than 500, then stop the loop
+```
+numbers = [12, 75, 150, 180, 145, 525, 50]
+```
+sol:
+numbers = [12, 75, 150, 180, 145, 525, 50]
+lst = []
+for num in numbers:
+  if num > 150:
+    if num > 500:
+      break
+  elif num%5==0:
+    lst.append(num) 
+
+print(lst)
