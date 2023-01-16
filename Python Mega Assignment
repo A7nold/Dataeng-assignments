@@ -151,27 +151,42 @@ for num in numbers:
 
 print(lst)
 Q26. What is a string? How can we declare string in Python?
-sol: 
+sol: A collection of alphabets, words or characters.
 
 Q27. How can we access the string using its index?
+sol: string[] 
 
 Q28. Write a code to get the desired output of the following
 
 string = "Big Data iNeuron"
 desired_output = "iNeuron"
+sol:
+string[9:16]
+
 Q29. Write a code to get the desired output of the following
 
 string = "Big Data iNeuron"
 desired_output = "norueNi"
+sol:
+string[15:8:-1]
+
 Q30. Resverse the string given in the above question.
+sol:
+string[::-1]
 
 Q31. How can you delete entire string at once?
+sol:
+del keyword del(string)
 
 Q32. What is escape sequence?
-
+sol: Escape sequence has a special meaning when we use it inside the strings. As the name suggests, the escape character escapes the characters in a string for a brief moment to
+     introduce unique inclusion.
+     
 Q33. How can you print the below string?
 
 'iNeuron's Big Data Course'
+sol: print('iNeuron's Big Data Course')
+
 Q34. What is a list in Python?
 
 Q35. How can you create a list in Python?
