@@ -188,40 +188,65 @@ Q33. How can you print the below string?
 sol: print('iNeuron's Big Data Course')
 
 Q34. What is a list in Python?
+sol: collection of things enclosed within [] seperated by commas
 
 Q35. How can you create a list in Python?
+sol: By using square brackets
 
 Q36. How can we access the elements in a list?
+sol: list[i], where i is Index
 
 Q37. Write a code to access the word "iNeuron" from the given list.
-
 lst = [1,2,3,"Hi",[45,54, "iNeuron"], "Big Data"]
+sol: lst[4][2]
+
 Q38. Take a list as an input from the user and find the length of the list.
+sol: lst = input("enter the values seperated by commas").split(',')
+     print(len(lst))
 
 Q39. Add the word "Big" in the 3rd index of the given list.
-
 lst = ["Welcome", "to", "Data", "course"]
+sol: lst.insert(2,"Big")
+
 Q40. What is a tuple? How is it different from list?
+sol: Tuple are collection of things same as list but enclosed within () and not []. Tuples are immutable compared to list which are mutable.
 
 Q41. How can you create a tuple in Python?
+sol: Enclosed within ().
 
 Q42. Create a tuple and try to add your name in the tuple. Are you able to do it? Support your answer with reason.
+sol: tple = ("bro","dude","homey")
+     cannot add as tuple are immutable
 
 Q43. Can two tuple be appended. If yes, write a code for it. If not, why?
+sol: Yes two tuple can be appended.
+     tup = ("arn")
+     le = ("old")
+     print(tup + le)
 
 Q44. Take a tuple as an input and print the count of elements in it.
+sol: tple = ("Welcome", "to", "Data", "course")
+     print(len(tple))
 
 Q45. What are sets in Python?
+sol: A set is an unordered collection of data types that is iterable, mutable and has no duplicate elements. The order of elements in a set
+     is undefined though it may consist of various elements.
 
 Q46. How can you create a set?
+sol: With {}.
 
 Q47. Create a set and add "iNeuron" in your set.
+sol: sett = {"iNeuron"}
 
 Q48. Try to add multiple values using add() function.
+sol: sett.add("arnold")
+     sett.add("francis")
 
 Q49. How is update() different from add()?
+sol: We can add more than one element in a single go using update(), but using add() it's not possible.
 
 Q50. What is clear() in sets?
+sol: To remove all the elements from the set, clear() function is used.
 
 Q51. What is frozen set?
 
