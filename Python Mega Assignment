@@ -249,46 +249,79 @@ Q50. What is clear() in sets?
 sol: To remove all the elements from the set, clear() function is used.
 
 Q51. What is frozen set?
+sol: Elements of the frozen set cannot be manipulated or is mutable as compared to a set.
 
 Q52. How is frozen set different from set?
+sol: frozen set is immutable and set is mutable.
 
 Q53. What is union() in sets? Explain via code.
-
+sol: Union set contains elements all the elements from the parent sets.
+     a = {2,5,6,7}
+     b = {1,3,8,9}
+     
+     print( a U b is :,a | b)
+     
 Q54. What is intersection() in sets? Explain via code.
-
+sol: Python set intersection() method returns a new set with an element that is common to all set.
+     a = {2,5,6,7}
+     b = {1,3,8,9}
+     
+     print( a intersection b is :,a & b)
+     
 Q55. What is dictionary ibn Python?
+sol: Dictionary is a set of key value pairs.
 
 Q56. How is dictionary different from all other data structures.
+sol: Dictionary is having key and value pair where as all other data structures have only values in them.
 
 Q57. How can we delare a dictionary in Python?
+sol: With help of {}.
 
 Q58. What will the output of the following?
-
 var = {}
 print(type(var))
+sol: dict
+
 Q59. How can we add an element in a dictionary?
-
+sol: dict = {}
+     dict["course"] = "big data"
+     
 Q60. Create a dictionary and access all the values in that dictionary.
-
+sol: Dict = {"Name": "Arnold", "Experience": 2, "Organisation":"acct"}
+     for i, j in Dict.items():
+     print(f"Key is {i} and value is {j}")
+     
 Q61. Create a nested dictionary and access all the element in the inner dictionary.
-
+sol: Dict = {"Name": {"f_name":"Arnold", "l_name":"Francis"}, "Experience": 2, "Organisation":"acct"}
+     for i, j in Dict["Name"].items():
+     print(f"Key is {i} and value is {j}")
+     
 Q62. What is the use of get() function?
+sol: To access items from the dictionary
 
 Q63. What is the use of items() function?
+sol: Its used to acccess the elements or loop through the elements from the dictionary. 
 
 Q64. What is the use of pop() function?
+sol: Same as get is used to access the elements from the dictionary
 
 Q65. What is the use of popitems() function?
+sol: removes the last iinserted key value pair in the dictionary and returns it.
 
 Q66. What is the use of keys() function?
+sol: keys() method returns a view object that displays a list of all the keys in the dictionary.
 
 Q67. What is the use of values() function?
+sol: values() method returns a view object that displays a list of all the values in the dictionary.
 
 Q68. What are loops in Python?
+sol: Loops are iterations. for example for and while.
 
 Q69. How many type of loop are there in Python?
+sol: for and while loop
 
 Q70. What is the difference between for and while loops?
+sol: for loop can be used when iterations can be known while loops are used when iterations could go to an extend which is unknown.
 
 Q71. What is the use of continue statement?
 
