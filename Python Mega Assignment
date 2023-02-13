@@ -601,6 +601,13 @@ Q96. Write a python program to print below pattern.
 * * * 
 * * * * 
 * * * * * 
+sol: 
+ def pypart(n):
+    for i in range(0,n+1):
+         print("* "*i)
+ n = 5
+ pypart(n)
+     
 Q97. Write a python program to print below pattern.
 
     *
@@ -608,6 +615,15 @@ Q97. Write a python program to print below pattern.
   ***
  ****
 *****
+sol: 
+ def pypart(n):
+    i=0
+    while(i<=n):
+        print(" "*(n-i)+"*"*i)
+        i = i+1
+ n = 5
+ pypart(n)
+
 Q98. Write a python program to print below pattern.
 
     * 
@@ -615,6 +631,15 @@ Q98. Write a python program to print below pattern.
   * * * 
  * * * * 
 * * * * * 
+sol: 
+ def pypart(n):
+    i=0
+    while(i<=n):
+        print(" "*(n-i)+"* "*i)
+        i = i+1
+ n = 5
+ pypart(n)
+
 Q99. Write a python program to print below pattern.
 
 1 
@@ -622,10 +647,26 @@ Q99. Write a python program to print below pattern.
 1 2 3 
 1 2 3 4 
 1 2 3 4 5
-Q100. Write a python program to print below pattern.
+sol:
+def pypart(n):
+    for i in range (0,n+1):
+        for j in range(1,i+1):
+            print(j,end=" ")
+        print("\r")
+n = 5
+pypart(n)
 
+Q100. Write a python program to print below pattern.
 A 
 B B 
 C C C 
 D D D D 
 E E E E E 
+sol:
+def pypart(n):
+    num = 64
+    for i in range(0,n+1):
+        print((chr(num)+" ")*i)
+        num = num +1
+n = 5
+pypart(n)
