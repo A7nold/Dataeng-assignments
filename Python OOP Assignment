@@ -41,26 +41,47 @@ sol: class person():
      obj1 = person("arnold")
      
 Q11. Where and how should be class attributes created?
-sol: 
+sol: Class attribute should be placed outside of the __init__ method.
+     class sampleclass:
+         count = 0  #class_attribute
+         
 Q12. Where and how are instance attributes created?
+sol: Instance attributes are created inside the funtcion or inside __init__.
+     class Dog:
 
+       def __init__(self, name, age):
+           self.name = name     #instance attribute
+           self.age = age       #instance attribute
+           
 Q13. What does the term "self" in a Python class mean?
-
+sol: self is the first argument and its special becausse it represents the particular instance of the class and allows to use the the variables and attrbutes of the
+     class uniquely.
+     
 Q14. How does a Python class handle operator overloading?
+sol: By creating multiple methods with the same name but takes in unique arguments
 
 Q15. When do you consider allowing operator overloading of your classes?
+sol: when the class has methods having same name but different datatypes or arguments.
 
 Q16. What is the most popular form of operator overloading?
+sol: creating multiple methods with same name under the class is the most popular form and efficient one.
 
 Q17. What are the two most important concepts to grasp in order to comprehend Python OOP code?
+sol: Both inheritance and polymorphism are key ingredients for designing robust, flexible, and easy-to-maintain software
 
 Q18. Describe three applications for exception processing.
-
+sol: * If we divide any number by zero, there occurs an ArithmeticException.
+     * converting character variable into digits.
+     * When an array exceeds to it's size
+     
 Q19. What happens if you don't do something extra to treat an exception?
+sol: The code will crash,stop or throw a wrong output.
 
 Q20. What are your options for recovering from an exception in your script?
+sol: Throwing try and catch to handle the exception adn continuing the code.
 
 Q21. Describe two methods for triggering exceptions in your script.
+sol: 
 
 Q22. Identify two methods for specifying actions to be executed at termination time, regardless of
 whether or not an exception exists.
