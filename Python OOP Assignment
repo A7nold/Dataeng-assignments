@@ -75,39 +75,72 @@ sol: * If we divide any number by zero, there occurs an ArithmeticException.
      * When an array exceeds to it's size
      
 Q19. What happens if you don't do something extra to treat an exception?
-sol: The code will crash,stop or throw a wrong output.
+sol: The code will crash,stop or throw a wrong output or error.
 
 Q20. What are your options for recovering from an exception in your script?
-sol: Throwing try and catch to handle the exception adn continuing the code.
+sol: * Throwing try and except to handle the exception and continuing the code.
+     * Catching Specific Exceptions in Python
+     * Python try with else clause
 
 Q21. Describe two methods for triggering exceptions in your script.
-sol: 
+sol: TRY and RAISE.
 
 Q22. Identify two methods for specifying actions to be executed at termination time, regardless of
-whether or not an exception exists.
+     whether or not an exception exists.
+sol: Finally and else
 
 Q23. What is the purpose of the try statement?
+sol: Try statement is used when the there is a posibility of an error occuring during runtime which is syntax correct but could throw execution error for a specific
+     chunk of code.
 
 Q24. What are the two most popular try statement variations?
+sol: try and except/ try else and finally.
 
 Q25. What is the purpose of the raise statement?
+sol: Raise statement is trigger exceptions.
 
 Q26. What does the assert statement do, and what other statement is it like?
+sol: assert statemnt checks for a conditions and throws the exception or continues to execute which is similar try statement.
 
 Q27. What is the purpose of the with/as argument, and what other statement is it like?
-
+sol: with statement helps avoiding bugs and leaks by ensuring that a resource is properly released when the code using the resource is completely executed, it is
+     similar to try statement.
+     
 Q28. What are *args, **kwargs?
-
+sol: Passing a variable number of arguments to a function using special symbols.
+     *args (Non-Keyword Arguments)
+     **kwargs (Keyword Arguments)
+     
 Q29. How can I pass optional or keyword parameters from one function to another?
-
+sol: To pass, collect the arguments using the * and ** in the function’s parameter list. Through this, you will get the positional arguments as a tuple and the 
+     keyword arguments as a dictionary. Pass these arguments when calling another function by using * and **.
+     
 Q30. What are Lambda Functions?
+sol: Python Lambda Functions are anonymous function means that the function is without a name.
 
 Q31. Explain Inheritance in Python with an example?
-
+sol: Inheritance is when you want to use the functions or attributed of other class(parent class) without rewriting the whole in a new class(child class).
+     class Person(object):
+         def __init__(self, name, id):
+             self.name = name
+             self.id = id
+     
+     class emp(person):
+         def print()
+             print(self.name)
+             
+     emp1 = emp("rahul",102)
+     
+     emp1.print()
+     
 Q32. Suppose class C inherits from classes A and B as class C(A,B).Classes A and B both have their own versions of method func(). If we call func() from an object of class C, which version gets invoked?
+sol: version from class A is invoked as it follows the manner from left to right
 
 Q33. Which methods/functions do we use to determine the type of instance and inheritance?
+sol: isinstance() and issubclass().
 
-Q34.Explain the use of the 'nonlocal' keyword in Python.
+Q34. Explain the use of the 'nonlocal' keyword in Python.
+sol: nonlocal keyword is used to reference a variable in the nearest scope. 
 
 Q35. What is the global keyword?
+sol: A global keyword is a keyword that allows a user to modify a variable outside the current scope.
