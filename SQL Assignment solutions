@@ -1,0 +1,9 @@
+1.   SELECT * from CITY where COUNTRYCODE = 'USA' and POPULATION > 100000;
+
+2.   SELECT NAME from CITY where COUNTRYCODE = 'USA' and POPULATION > 120000;
+
+3.   SELECT * from CITY;
+
+4.   SELECT * from CITY where ID = 1661;
+
+5.   SELECT * from CITY where COUNTRYCODE = 'JPN';
