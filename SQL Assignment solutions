@@ -7,3 +7,18 @@
 4.   SELECT * from CITY where ID = 1661;
 
 5.   SELECT * from CITY where COUNTRYCODE = 'JPN';
+
+6.   SELECT NAME from CITY where COUNTRYCODE = 'JPN';
+
+7.   SELECT CITY,STATE from STATION;
+
+8.   SELECT CITY from STATION where ID/2 = 0;
+
+9:   SELECT COUNT(CITY) - COUNT(DISTINCT CITY) as difference_city
+     from STATION; 
+     
+10.  select CITY,LENGTH(CITY) as SMALL from STATION ORDER BY SMALL,CITY  LIMIT 1;
+
+     select CITY,LENGTH(CITY) as SMALL from STATION ORDER BY SMALL DESC,CITY  LIMIT 1;
+     
+11.
