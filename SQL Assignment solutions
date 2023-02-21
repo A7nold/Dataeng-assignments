@@ -32,3 +32,33 @@
 15.  SELECT DISTINCT CITY FROM STATION WHERE CITY REGEXP '[aeiou]$' or CITY REGEXP '^[aeiou]';
 
 16.  SELECT DISTINCT CITY FROM STATION WHERE CITY REGEXP '[aeiou]$' and CITY REGEXP '^[aeiou]';
+
+17.  select p.product_id,p.product_name
+     from Product p 
+     where product_id not in(select s.product_id from sales s where s.sale_date not between '2019-01-01' and '2019-03-31');
+     
+18.  select distinct author_id as id
+     from Views
+     where author_id = viewer_id
+     order by id;
+     
+19.  select round(avg(case when order_date = customer_pref_delivery_date then 1 else 0)*100,2) as immediate_percentage from delivery;
+
+20.  select ad_id,ifnull(round(avg(case when action = "Clicked" then 1 when action = "Viewed" then 0 else null end) * 100,2),0) as ctr
+     from Ads
+     group by ad_id
+     order by ctr desc, ad_id asc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
