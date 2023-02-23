@@ -49,7 +49,23 @@
      group by ad_id
      order by ctr desc, ad_id asc;
 
-
+21.  select *,
+     COUNT(Team_id) over(PARTITION BY Team_id ) as team_size
+     from employees
+     ORDER BY emp_id;
+     
+22.  select c.country_name, (
+     case when w.avg_temperature <= 15 then 'Cold'
+         when w.avg_temperature >= 25 then 'Hot'
+         else 'Warm' end
+     ) as weather_type
+     from (
+        select country_id, avg(weather_state) as avg_temperature from Weather
+            where day between '2019-11-01' and '2019-11-30'
+        group by country_id
+     ) as w
+        inner join Countries c
+        on w.country_id = c.country_id;
 
 
 
