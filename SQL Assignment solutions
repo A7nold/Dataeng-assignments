@@ -67,7 +67,24 @@
         inner join Countries c
         on w.country_id = c.country_id;
 
+23.  Select d.product_id, round((sum(price*units)+0.00)/(sum(units)+0.00),2) as average_price
+     from(
+     Select *
+     from prices p
+     natural join 
+     unitssold u
+     where u.purchase_date between p.start_date and p.end_date) d
+     group by d.product_id;
+     
+24.  select player_id,event_date as first_login
+     from Activity
+     group by player_id
+     having min(event_date);
 
+25.  select player_id,device_id
+     from Activity
+     group by player_id
+     having min(event_date);
 
 
 
