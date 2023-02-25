@@ -86,9 +86,35 @@
      group by player_id
      having min(event_date);
 
+26.  SELECT p.product_name, 
+            o.unit 
+     FROM   (SELECT product_id, 
+               Sum(unit) AS unit 
+        FROM   orders 
+        WHERE  order_date BETWEEN '2020-02-01' AND '2020-02-29' 
+        GROUP  BY product_id 
+        HAVING unit >= 100) o 
+     INNER JOIN products p 
+               ON o.product_id = p.product_id 
 
-
-
+27.  select * from Users
+     where mail REGEXP '^[a-zA-A]+[a-zA-Z0-9_\./\-]*@leetcode\.com$';
+     
+28.  select o.customer_id, name
+     from
+     Orders o
+     join
+     Product p
+     on o.product_id = p.product_id
+     join
+     Customers c
+     on o.customer_id = c.customer_id
+     group by 1, 2
+     having sum(case when date_format(order_date, '%Y-%m')='2020-06'
+     then price*quantity end) >= 100
+     and 
+     sum(case when date_format(order_date, '%Y-%m')='2020-07'
+     then price*quantity end) >= 100;
 
 
 
