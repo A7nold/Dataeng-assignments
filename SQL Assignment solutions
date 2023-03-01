@@ -116,8 +116,32 @@
      sum(case when date_format(order_date, '%Y-%m')='2020-07'
      then price*quantity end) >= 100;
 
+29.  select distinct title 
+     from Content join TVProgram on Content.content_id = TVProgram.content_id
+     where Kids_content = 'Y' and content_type = 'Movies' and month(program_date) = '06';
+     
+30.  select q.id, q.year, ifnull(n.npv, 0) as npv from Queries q
+     left join NPV n 
+     on q.id = n.id and q.year = n.year;
 
-
+31.  select q.id, q.year, ifnull(n.npv, 0) as npv from Queries q
+     left join NPV n 
+     on q.id = n.id and q.year = n.year;
+     
+32.  select e.unique_id, emp.name
+     from employees emp left join employeesUNI e on emp.id = e.id;
+      
+33.  select u.name, ifnull(sum(r.distance),0) as  travelled_distance
+     from users u left join Rides r on u.id = r.user_id
+     group by r.user_id
+     order by travelled_distance desc,u.name asc;
+     
+     
+     
+     
+     
+     
+     
 
 
 
