@@ -181,6 +181,43 @@
      FROM Calls
      GROUP BY person1, person2;
      
+40.  Select d.product_id, round((sum(price*units)+0.00)/(sum(units)+0.00),2) as average_price
+     from(
+     Select *
+     from prices p
+     natural join 
+     unitssold u
+     where u.purchase_date between p.start_date and p.end_date) d
+     group by d.product_id;
+     
+41.  select warehouse_name, sum(volume) as volume 
+     from (select w.name as warehouse_name, w.product_id, w.units * Width * Length * Height as volume
+     from Warehouse w left join Products p on w.product_id = p.product_id) t 
+     group by warehouse_name;
+    
+42.  Select sale_date, sold_num-sold as diff
+     from 
+     ((select *
+     from sales
+     where fruit = 'apples') a
+     join 
+     (select sale_date as sale, fruit, sold_num as sold
+     from sales
+     where fruit = 'oranges') b
+     on a.sale_date = b.sale) 
 
-
+43.  SELECT round(sum(CASE
+                      WHEN t1.event_date = t2.first_event+1 THEN 1
+                      ELSE 0
+                      END)/count(DISTINCT t1.player_id), 2) AS fraction
+     FROM Activity AS t1
+     INNER JOIN
+     (SELECT player_id, min(event_date) AS first_event
+     FROM Activity
+     GROUP BY player_id) AS t2 ON t1.player_id = t2.player_id;
+     
+44.  select b.Name
+     from Employee a left join Employee b on b.Id = a.ManagerId
+     group by b.Name
+     having COUNT(b.id) > 4;
 
