@@ -1,0 +1,41 @@
+                                                                    SCENARIO 1
+
+Question 1. What are the strengths and weaknesses of each option?
+
+option1 strength and weakness
+* More accurate and precise understanding of the fact table.
+* Have to add just one column in fact table without altering the rows thus less complexity by adding just one row in dimension.
+* Finding the total or most popular instructors would be hard as it would require further segregation.
+* Easy to find courses with multiple instructors.
+
+option2 strength and weakness
+* Dimension table not required any altering but rows in fact table to be added thus more complex as extra task.
+* There would be duplicates of student enrolment ids in the fact table which creates unclean data for rest of the analysis.
+* rows with 0.5 enrollemntcount would be easier to find and analyze thus sepearting course with single instructors since its less than 5%.
+
+option3 strength and weakness
+* craeting Multiple fact table thus creating confusion and increasing complexity.
+* since second fact tables would still have duplicates of student enrollemnts more seggregation would eb required to analyze the data.
+* Queries related to other dimensions would be easier to analyze since seperate fact table.
+* enrollmentcount would be 1 for all rows thus there could be miscalculations of the data for somone who is analyzing the data without knowing this.
+
+Question 2. Which option would you choose and why?
+
+Third option would be the recommended one as for me it is easier to work with two fact tables and use the one required for analysis without the need of
+inclusion of instrucctor dimension. Also this method would get us presize answers without the need of complex sperations of the delimters or inclusion 
+of the enrolmentcount column.
+
+Question 3. Would your answer to Question 2 be different if the majority of classes had multiple instructors? How
+about if only one or two classes had multiple instructors? (Explain your answer.)
+
+if majority classes had multiple instructors still would recommend option 3 as this option would allow to create two sepearte fact tables use the one
+required for analysis without the need of inclusion of instrucctor dimension. This option is less prone to errors if the right table is used for analysis.
+
+
+
+
+
+
+
+
+
