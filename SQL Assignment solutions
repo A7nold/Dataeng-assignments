@@ -233,7 +233,80 @@
      GROUP BY customer_id
      HAVING COUNT( DISTINCT product_key) = (SELECT COUNT(*) FROM Product);
      
-47.  
+47.  SELECT
+     project_id,
+     employee_id
+     FROM (
+     SELECT
+        p.project_id,
+        p.employee_id,
+        DENSE_RANK() OVER(PARTITION BY p.project_id ORDER BY e.experience_years DESC) as rnk
+     FROM project as p JOIN employee as e
+     ON p.employee_id = e.employee_id
+     ) x
+     WHERE rnk = 1;
+     
+48.  SELECT
+     p.product_id    AS product_id,
+     SUM(o.quantity) AS qty
+     FROM
+     product p
+     LEFT JOIN
+     orders o
+     ON
+     o.product_id = p.product_id
+     WHERE
+     o.dispach_date >= today() - DATE_ADD(today(), -1, 'year')
+     AND p.available_from < today() - DATE_ADD(today(), -1, 'month')
+     GROUP BY
+     p.product_id
+     HAVING
+     SUM(o.quantity) < 10;
+     
+49.  SELECT
+     student_id,
+     course_id,
+     grade
+     FROM (
+     SELECT
+     student_id,
+     course_id,
+     grade,
+     DENSE_RANK() OVER(PARTITION BY student_id ORDER BY grade DESC, course_id) as rnk
+     FROM enrollments
+     ) x
+     WHERE rnk=1
+     ORDER BY student_id;
+     
+50.  WITH tb1 AS (
+     SELECT first_player AS player, first_score as score
+     FROM Matches
+     UNION ALL
+     SELECT second_player, second_score
+     FROM Matches
+     ),
+     tb2 AS (
+     SELECT p.player_id, p.group_id, SUM(tb1.score) AS tp
+     FROM Players p
+     LEFT JOIN tb1
+     ON p.player_id = tb1.player
+     GROUP BY p.player_id, p.group_id
+     )
+     SELECT group_id, player_id
+     FROM (
+     SELECT player_id, group_id,
+        ROW_NUMBER() OVER (PARTITION BY group_id ORDER BY tp DESC, player_id) AS r
+     FROM tb2
+     ) tb3
+     WHERE r = 1;
+
+     
+     
+     
+     
+     
+     
+     
 
 
 
