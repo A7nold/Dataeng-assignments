@@ -1,0 +1,19 @@
+a. Calculatye total sales per year
+query: select year_id, sum(sales) as total_sales from sales_order_orc group by year_id;
+output: 
+year_id total_sales
+2003    3516979.547241211
+2004    4724162.593383789
+2005    1791486.7086791992
+
+b. Find a product for which maximum orders were placed
+query: select product,sum(quantity_ordered) as qantity from sales_order_orc group by product order by qantity desc limit 1;
+output: 
+product qantity
+Classic Cars    33992
+
+c. Calculate the total sales for each quarter
+d. In which quarter sales was minimum
+e. In which country sales was maximum and in which country sales was minimum
+f. Calculate quartelry sales for each city
+h. Find a month for each year in which maximum number of quantities were sold
