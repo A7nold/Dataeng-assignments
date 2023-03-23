@@ -31,3 +31,26 @@
     group by customer_number
     order by tmp desc) tp
     limit 1;
+    
+8.  select a.seat_id,
+    from Cinema a join Cinema b
+    on ABS(a.seat_id - b.seat_id) = 1
+    where a.free = 1 AND b.free = 1
+    order by a.seat_id;
+    
+9.  select name
+    from SalesPerson 
+    where sales_id not in (select o.sales_id 
+    from SalesPerson s join Company c join Orders o
+    on s.sales_id = o.sales_id AND c.com_id = o.com_id
+    where c.name = 'RED');
+    
+10. SELECT 
+    x, 
+    y, 
+    z, 
+    IF(x + y > z AND y + z > x AND z + x > y, 'Yes', 'No') triangle 
+    FROM
+    triangle;
+    
+    
