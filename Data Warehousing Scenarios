@@ -34,7 +34,45 @@ required for analysis without the need of inclusion of instrucctor dimension. Th
 
 
 
+                                                                   SCENARIO 2
+                                                             
+Question 5. What are the strengths and weaknesses of each option?
 
+option1 strength and weakness
+* This option allows for the scores to be stored as attribute of the customer dimension which will make it easy for users to filter or group by scores in
+  their queries.
+* It also avoids the need gfor additional dimensions or outrigger tables, which may simplify the overall design of the warehouse.
+* This option involves overwriting old scores with new scores when they change, which means that the warehouse will not retain a history of chnages to 
+  customers scores.
+* This makes it difficult for users to understand how and why a customers scores changes overtime
+
+option2 strength and weakness
+* This option allows for the retention of a history of changes to customer scores, which may be useful for analysis and understanding how scores changes overtime.
+* It also allows for the scores to be stored as attributtes of the customers dimensions, which will make it easy for the users to filter or group by the scores in
+  their queries.
+* This option requires the creation of a new customer dimension rows each time a score changes, which may increase the complecity and the size of the dimension.
+* It may also make it more difficult for the users to identify the current score for a customer, as they will have to determmine which row represents the most
+  recent scores.
+  
+option3 strength and weakness
+* This option allows the scores to be stored in a seperate customerscores dimension, which makes it easier for users to filter or group by scores in their queries.
+* It also allows the retention of a history of changes to customer scores, as the fact table includes a foreign key to the customerscores dimension rather than the 
+  scores themselves.
+* This option requires the creation of a seperate Customerscores dimension with 45 rows, which increase the complexity of the warehouse design.
+* It also requires the use of the foreign keys in the fact table, which may make it more difficult to perform certain types of analysis.
+
+option4 strength and weakness
+* This option allows the scores to be stored in an outrigger table, which makes it easier for the users or group by scores in their queries.
+* It also allows for the retention of a history of changes to customer scores, as the customer dimenison includes a foreign key to the outrigger table rather than
+  the scores themselves.
+* This option requires the use of an outrigger table, which may increase the complexity of teh warehouse design. 
+* It alos requires the use of foreign keys in the customer dimension, which may make it more difficult to perform certains types of analysis.
+
+Question 6. Which option would you choose and why?
+Question 7. Would your answer to Question 6 be different if the number of customers and/or the time interval
+between score recalculations was much larger or much smaller? (Explain your answer.)
+Question 8. [OPTIONAL] Can you think of another reasonable alternative design besides Options A, B, C, and D?
+If so, what are the advantages and disadvantages of your alternative design?
 
 
 
