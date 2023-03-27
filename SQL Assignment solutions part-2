@@ -53,4 +53,26 @@
     FROM
     triangle;
     
+11. select min(abs(p1.x -  p2.x)) shortest 
+    from point p1, point p2 
+    where p1.x <> p2.x;
     
+12. select actor_id,director_id
+    from ActorDirector
+    group by actor_id,director_id
+    having count(timestamp) > 2;
+    
+13. select p.product_name, s.year, s.price
+    from Product p
+    join Sales s
+    on s.product_id = p.product_id;
+    
+14. select project_id , round(avg(experience_years), 2) as average_years
+    from project as p
+    left join employee as e
+    on p.employee_id = e.employee_id
+    group by project_id;
+    
+15. select seller_id from Sales group by seller_id
+    having sum(price) = (select sum(price) from sales group by seller_id order by sum(price) desc limit 1);
+   
