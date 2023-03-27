@@ -69,10 +69,22 @@ option4 strength and weakness
 * It alos requires the use of foreign keys in the customer dimension, which may make it more difficult to perform certains types of analysis.
 
 Question 6. Which option would you choose and why?
+
+I would choose option B. This option allows for the retention of a history of changes to customer scores. which may be useful for analysis and understanding how 
+scores changes over time. It also allows for the scores to be stored as attributes of Customer dimension, which will make it easy for users to filter and group by 
+scores in their queries.
+
 Question 7. Would your answer to Question 6 be different if the number of customers and/or the time interval
 between score recalculations was much larger or much smaller? (Explain your answer.)
+
+If the number of customer or the time interval between score recalculations was much larger, i would still choose option B. This option allows for the retention of 
+history of changes to customer scores easily, which may be more useful for analysis and understanding how scores change over time when dealing with larger number of 
+customers or more ffrequent score recalculations.
+
 Question 8. [OPTIONAL] Can you think of another reasonable alternative design besides Options A, B, C, and D?
 If so, what are the advantages and disadvantages of your alternative design?
+
+An alternate design that could be considered is to  store the scores in a seperate CustomerScore fact table with a grain of one row per customer.
 
 
 
