@@ -75,4 +75,37 @@
     
 15. select seller_id from Sales group by seller_id
     having sum(price) = (select sum(price) from sales group by seller_id order by sum(price) desc limit 1);
+    
+16. select distinct buyer_id from Sales s join Product p
+    on p.product_id = s.product_id
+    where p.product_name = 'S8'
+    and buyer_id not in ( select buyer_id from Sales s join Product p on p.product_id = s.product_id where p.product_name = 'iPhone');
    
+17. select visited_on, sum(amount) over(order by visited_on rows preceeding 6) a,round(avg(amount),2) over(order by visited_on rows preceeding 6) b
+    from (select visited_on,sum(amount) as amount from Customer group by visited_on order by visited_on) a
+    order by visited_on offset 6;
+    
+18. SELECT gender, day, SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS total
+    FROM Scores
+    group by gender,day order by gender,day;
+    
+19. WITH cte as
+    select log_id,log_id - ROW_NUMBER() over (order by log_id) as diff
+    from logs
+    
+    select min(log_id) as start_id,Max(log_id) as end_id
+    from cte
+    group by diff
+    order by start_id;
+    
+20. WITH cte1 as
+    (select * from Students cross join Subjects),
+    cte2 as 
+    (select student_id, subject_name, count(subject_name) as count from examinations group by student_id,student_name)
+    
+    select cte1.student_id,cte1.student_name,cte1.subject_name,ISNULL(cte2.count,0)
+    from cte1 left join cte2
+    on cte1.student_id = ct2.student_id and cte1.subject_name = cte2.subject_name
+    order by cte1.student_id,cte1.subject_name;
+    
+    
