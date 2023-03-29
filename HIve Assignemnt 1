@@ -34,7 +34,36 @@ query: (select country, sum(sales) as total_sales from sales_order_orc group by 
 output:
 
 f. Calculate quartelry sales for each city
+query: select CITY, QTR_ID, sum(SALES) as total_sales from sales_order_orc group by CITY, QTR_id order by CITY;
+
+output:
+CITY	QTR_ID	total_sales
+Aaarhus	 4	100595.5498046875
+Allentown	 2	6166.7998046875
+Allentown	 3	71930.61041259766
+Allentown	 4	44040.729736328125
+Barcelona	 2	4219.2001953125
+Barcelona	 4	74192.66003417969
+Bergamo	 1	56181.320068359375
+Bergamo	 4	81774.40008544922
+Bergen	 3	16363.099975585938
+Bergen	 4	95277.1799316
+
 h. Find a month for each year in which maximum number of quantities were sold
+query: 
+with cte1 as (select YEAR_ID ,MONTH_ID ,sum(QUANTITYORDERED) as quant from sales_order_data sod group by YEAR_ID ,MONTH_ID 
+order by YEAR_ID,MONTH_ID)
+
+select cte1.year_id as year_id,cte1.month_id as month_id ,cte1.quant as total_quant
+from cte1
+where (cte1.year_id,cte1.quant) in (select cte1.year_id,max(cte1.quant) as quant from cte1 group by year_id );
+
+output:
+year_id	month_id	total_quant
+2003	11	10179
+2004	11	10678
+2005	5	4357
+
 
 
 
