@@ -151,6 +151,26 @@
      FROM Activity
      GROUP BY player_id) AS t2 ON t1.player_id = t2.player_id;
      
- 26. 
-    
+ 26. select company_id, employee_id, employee_name, round(salary - salary*tax, 0) as salary
+     from
+     (select *,
+       case 
+       when max(salary) over(partition by company_id) < 1000 then 0
+       when max(salary) over(partition by company_id) between 1000
+       and 10000 then 0.24
+       else 0.49 end as tax
+     from Salaries) x ; 
+     
+ 27. select e.left_operand, e.operator, e.right_operand,
+       case 
+       when e.operator = '<' then if(l.value < r.value, 'true', 'false')
+       when e.operator = '>' then if(l.value > r.value, 'true', 'false')
+       else if(l.value = r.value, 'true', 'false') 
+       end as value
+     from Expressions e
+     join Variables l
+     on e.left_operand = l.name
+     join Variables r
+     on e.right_operand = r.name;
+   
     
