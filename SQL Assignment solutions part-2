@@ -108,4 +108,49 @@
     on cte1.student_id = ct2.student_id and cte1.subject_name = cte2.subject_name
     order by cte1.student_id,cte1.subject_name;
     
+21. SELECT e1.employee_id
+    FROM Employees e1
+    JOIN Employees e2
+    ON e1.manager_id = e2.employee_id
+    JOIN Employees e3
+    ON e2.manager_id = e3.employee_id
+    WHERE e3.manager_id = 1 AND e1.employee_id != 1;
+    
+22. select date_format(trans_date, '%Y-%m') as month, country, count(*) as trans_count,
+    sum(if(state = 'approved', 1, 0)) as approved_count, sum(amount) as trans_total_amount,
+    sum(if(state = 'approved', amount, 0)) as approved_total_amount
+    from Transactions
+    group by date_format(trans_date, '%Y-%m'), country;
+    
+23. select round(avg(daily_count), 2) as average_daily_percent
+    from (select count(distinct b.post_id)/count(distinct a.post_id)*100 as daily_count
+         from actions a
+         left join removals b
+         on a.post_id = b.post_id
+         where extra = 'spam'
+         group by action_date
+         ) b ;
+         
+ 24. SELECT round(sum(CASE
+                      WHEN t1.event_date = t2.first_event+1 THEN 1
+                      ELSE 0
+                      END)/count(DISTINCT t1.player_id), 2) AS fraction
+     FROM Activity AS t1
+     INNER JOIN
+     (SELECT player_id, min(event_date) AS first_event
+     FROM Activity
+     GROUP BY player_id) AS t2 ON t1.player_id = t2.player_id;
+     
+ 25. SELECT round(sum(CASE
+                      WHEN t1.event_date = t2.first_event+1 THEN 1
+                      ELSE 0
+                      END)/count(DISTINCT t1.player_id), 2) AS fraction
+     FROM Activity AS t1
+     INNER JOIN
+     (SELECT player_id, min(event_date) AS first_event
+     FROM Activity
+     GROUP BY player_id) AS t2 ON t1.player_id = t2.player_id;
+     
+ 26. 
+    
     
