@@ -172,5 +172,29 @@
      on e.left_operand = l.name
      join Variables r
      on e.right_operand = r.name;
+     
+28. select co.name AS country
+    FROM
+    person p
+    JOIN
+    country co
+    ON SUBSTRING(phone_number,1,3) = country_code
+    JOIN
+    calls c
+    ON p.id IN (c.caller_id, c.callee_id)
+    GROUP BY
+    co.name
+    HAVING
+    AVG(duration) > (SELECT AVG(duration) FROM calls);
+ 
+29. select name from employee order by name;
+
+30. with cte1 AS
+    (SELECT extract(year from transaction_date) as year,product_id,spend as curr_year_spend,
+    lag(spend) over(PARTITION BY product_id) as prev_year_spend from user_transactions group by product_id,year,spend)
+
+    SELECT *,ROUND(100*(cte1.curr_year_spend-cte1.prev_year_spend)/prev_year_spend,2) as yoy_rate
+    from cte1;
+
    
     
