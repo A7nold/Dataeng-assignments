@@ -82,6 +82,7 @@ LOAD DATA LOCAL INPATH ‘Home/country/state/’
 OVERWRITE INTO TABLE address;
 
 The following statement failed to execute. What can be the cause?
+ans: Since the file path is from the local it should be initialized with complete path location as file:///
 
 Is it possible to add 100 nodes when we already have 100 nodes in Hive? If yes, how?
 
