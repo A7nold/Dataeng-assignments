@@ -255,5 +255,53 @@
     ROUND(PERCENTILE_CONT(0.50) WITHIN GROUP (
     ORDER BY searches)::DECIMAL, 1) AS  median
     FROM searches_expanded;
+    
+34. WITH payment_status AS (
+    SELECT
+    advertiser.user_id,
+    advertiser.status,
+    payment.paid
+    FROM advertiser
+    LEFT JOIN daily_pay AS payment
+    ON advertiser.user_id = payment.user_id
+
+    UNION
+
+    SELECT
+    payment.user_id,
+    advertiser.status,
+    payment.paid
+    FROM daily_pay AS payment
+    LEFT JOIN advertiser
+    ON advertiser.user_id = payment.user_id
+    )
+
+    SELECT
+    user_id,
+    CASE WHEN paid IS NULL THEN 'CHURN'
+  	WHEN status != 'CHURN' AND paid IS NOT NULL THEN 'EXISTING'
+  	WHEN status = 'CHURN' AND paid IS NOT NULL THEN 'RESURRECT'
+  	WHEN status IS NULL THEN 'NEW'
+    END AS new_status
+    FROM payment_status
+    ORDER BY user_id;  
+    
+35. WITH running_time 
+    AS (
+    SELECT
+    server_id,
+    session_status,
+    status_time AS start_time,
+    LEAD(status_time) OVER (
+      PARTITION BY server_id
+      ORDER BY status_time) AS stop_time
+    FROM server_utilization
+    )
+  
+    SELECT
+    DATE_PART('days', JUSTIFY_HOURS(SUM(stop_time - start_time))) AS total_uptime_days
+    FROM running_time
+    WHERE session_status = 'start'
+    AND stop_time IS NOT NULL;  
    
     
