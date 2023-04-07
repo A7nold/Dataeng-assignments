@@ -89,17 +89,6 @@ Is it possible to add 100 nodes when we already have 100 nodes in Hive? If yes, 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 Hive Practical questions:
 
 Hive Join operations
@@ -108,8 +97,51 @@ Create a  table named CUSTOMERS(ID | NAME | AGE | ADDRESS   | SALARY)
 Create a Second  table ORDER(OID | DATE | CUSTOMER_ID | AMOUNT
 )
 
+ans: 
+create table customers
+(
+id int,
+name string,
+age int,
+address string,
+salary int
+)
+row format delimited
+feilds terminated by ',';
+
+create table orders
+(
+oid int,
+date string,
+customer_id int,
+amt int
+)
+row format delimited
+feilds terminated by ',';
+
 Now perform different joins operations on top of these tables
 (Inner JOIN, LEFT OUTER JOIN ,RIGHT OUTER JOIN ,FULL OUTER JOIN)
+
+ans:
+* inner join
+select * from customer c
+inner join orders o
+on c.id = o.customer_id
+
+* left join
+select * from customer c
+left join orders o
+on c.id = o.customer_id
+
+* right join
+select * from customer c
+right join orders o
+on c.id = o.customer_id
+
+* full outer join
+select * from customer c
+full outer join orders o
+on c.id = o.customer_id
 
 BUILD A DATA PIPELINE WITH HIVE
 
@@ -117,12 +149,63 @@ Download a data from the given location -
 https://archive.ics.uci.edu/ml/machine-learning-databases/00360/
 
 1. Create a hive table as per given schema in your dataset 
+ans:
+create table AIRQUALITY
+(
+da_te string,
+ti_me string,
+CO_GT float,
+PT08_S1_CO int,
+NMHC_GT int,
+C6H6_GT float,
+PT08_S2_NMHC int,
+NOx_GT int,
+PT08_S3_NOx int,
+NO2_GT int,
+PT08_S4_NO2 int,
+PT08_S5_O3 int,
+T float,
+RH float,
+AH float
+)
+row format delimited
+fields terminated by ','
+tblproperties("skip.header.line.count"="1");
+
 2. try to place a data into table location
+ans:
+ load data local inpath 'file:///Users/arnol/Downloads/AirQualityUCI/AirQualityUCI.csv' into table AIRQUALITY;
+ 
 3. Perform a select operation . 
+ans: 
+ select * from AIRQUALITY limit 5;
+
 4. Fetch the result of the select operation in your local as a csv file . 
+ans: 
+ creating csv file in hadoop:
+ INSERT OVERWRITE DIRECTORY '/tmp/hive/airquality_tocsv.csv' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT *
+ FROM AIRQUALITY_tocsv;
+ 
 5. Perform group by operation . 
+ans: 
+ select da_te,sum(CO_GT) from AIRQUALITY group by da_te;
+
 7. Perform filter operation at least 5 kinds of filter examples . 
+ans: 
+1) select * from AIRQUALITY where da_te = '10-03-2004';
+
+2) select * from AIRQUALITY where da_te = '10-03-2004' and time > '20:00:00';
+
+3) select * from AIRQUALITY where da_te = '10-03-2004' limit 3;
+
+4) select * from AIRQUALITY where da_te in ('10-03-2004', '11-03-2004');
+
+5) select da_te,count(CO_GT) from AIRQUALITY where da_te = '31-04-2005' group by da_te;
+
 8. show and example of regex operation
+ans: 
+ select distinct(da_te) from AIRQUALITY where da_te regexp '^01';
+ 
 9. alter table operation 
 10 . drop table operation
 12 . order by operation . 
@@ -132,9 +215,6 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/00360/
 16 . like an operation you have to perform . 
 17 . union operation you have to perform . 
 18 . table view operation you have to perform . 
-
-
-
 
 
 
