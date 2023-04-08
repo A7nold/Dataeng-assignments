@@ -150,7 +150,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/00360/
 
 1. Create a hive table as per given schema in your dataset 
 ans:
-create table AIRQUALITY
+create table air_quality
 (
 da_te string,
 ti_me string,
@@ -207,17 +207,40 @@ ans:
  select distinct(da_te) from AIRQUALITY where da_te regexp '^01';
  
 9. alter table operation 
+ans: 
+ alter table AIRQUALITY rename to AIR_QUALITY;
+ 
 10 . drop table operation
+ans: 
+ drop table airquality_tocsv;
+ 
 12 . order by operation . 
+ans: 
+ select * from air_quality order by da_te limit 5;
+ 
 13 . where clause operations you have to perform . 
+ans: 
+ select * from air_quality where da_te = '9/13/2004';
+
 14 . sorting operation you have to perform . 
+ans: 
+ select * from air_quality where da_te = '10-03-2004' sort by co_gt;
+ 
 15 . distinct operation you have to perform . 
+ans:
+ select distinct(da_te) from air_quality limit 5;
+ 
 16 . like an operation you have to perform . 
+ans: 
+ select * from air_quality where da_te like '%2004';
+ 
 17 . union operation you have to perform . 
+ans:
+ select RH 'as' rh_tot, count(RH) as count from air_quality where RH < 0
+union
+select AH 'as' ah_tot, count(AH) as count from air_quality where AH < 0;
+
 18 . table view operation you have to perform . 
+ans: create view count_co_gt as 
+     select 'co_gt', count(*) from air_quality;
 
-
-
-hive operation with python
-
-Create a python application that connects to the Hive database for extracting data, creating sub tables for data processing, drops temporary tables.fetch rows to python itself into a list of tuples and mimic the join or filter operations
