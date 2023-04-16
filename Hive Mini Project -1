@@ -1,0 +1,187 @@
+This is a real time dataset of the ineuron technical consultant team. You have to perform hive analysis on this given dataset.
+
+Download Dataset 1 - https://drive.google.com/file/d/1WrG-9qv6atP-W3P_-gYln1hHyFKRKMHP/view
+
+Download Dataset 2 - https://drive.google.com/file/d/1-JIPCZ34dyN6k9CqJa-Y8yxIGq6vTVXU/view
+
+Note: both files are csv files. 
+
+
+1. Create a schema based on the given dataset
+
+ create table agent_performance_bkp
+    > (
+    > sl_no int,
+    > ag_date string,
+    > agent_name string,
+    > total_chats int,
+    > average_response_time string,
+    > average_resolution_time string,
+    > average_rating float,
+    > total_feedback int
+    > )
+    > row format delimited
+    > fields terminated by ','
+    > tblproperties("skip.header.line.count"="1");
+    
+create table agent_performance
+    > (
+    > sl_no int,
+    > ag_date date,
+    > agent_name string,
+    > total_chats int,
+    > average_response_time bigint,
+    > average_resolution_time bigint,
+    > average_rating float,
+    > total_feedback int
+    > )
+    > row format delimited
+    > fields terminated by ',';
+    
+create table agent_loging_report_bkp                                                                                        (
+    > sl_no int,
+    > agent_name string,
+    > ag_date string,
+    > login_time string,
+    > logout_time string,
+    > duration string
+    > )
+    > row format delimited
+    > fields terminated by ','
+    > tblproperties("skip.header.line.count"="1");
+    
+create table agent_loging_report
+    > (
+    > sl_no int,
+    > agent_name string,
+    > ag_date date,
+    > login_time bigint,
+    > logout_time bigint,
+    > duration bigint
+    > )
+    > row format delimited
+    > fields terminated by ',';
+    
+    
+2. Dump the data inside the hdfs in the given schema location.
+
+load data inpath '/tmp/hive/AgentPerformance.csv' into table agent_performance_bkp;
+
+insert into table agent_performance select sl_no,
+    > from_unixtime(unix_timestamp(ag_date,'mm/dd/yyyy'), 'yyyy-mm-dd'), agent_name, total_chats,
+    > case when average_response_time like '%:%:%' then unix_timestamp(average_response_time,'HH:mm:ss')
+    > when average_response_time like '%:%'   then unix_timestamp(average_response_time,'mm:ss')
+    > else average_response_time
+    > end as average_response_time,
+    > case when average_resolution_time like '%:%:%' then unix_timestamp(average_resolution_time,'HH:mm:ss')
+    > when average_resolution_time like '%:%'   then unix_timestamp(average_resolution_time,'mm:ss')
+    > else average_resolution_time
+    > end as average_resolution_time,
+    > average_rating, total_feedback
+    > from agent_performance_bkp;
+    
+load data inpath '/tmp/hive/AgentLogingReport.csv' into table agent_loging_report_bkp;
+
+insert into table agent_loging_report select sl_no, agent_name,
+    > from_unixtime(unix_timestamp(ag_date,'dd-MMM-yy')),
+    > case when login_time like '%:%:%' then unix_timestamp(login_time,'HH:mm:ss')
+    > when login_time like '%:%'   then unix_timestamp(login_time,'mm:ss')
+    > else login_time
+    > end as login_time,
+    > case when logout_time like '%:%:%' then unix_timestamp(logout_time,'HH:mm:ss')
+    > when logout_time like '%:%'   then unix_timestamp(logout_time,'mm:ss')
+    > else logout_time
+    > end as logout_time,
+    > case when duration like '%:%:%' then unix_timestamp(duration,'HH:mm:ss')
+    > when duration like '%:%'   then unix_timestamp(duration,'mm:ss')
+    > else duration
+    > end as duration
+    > from agent_loging_report_bkp;
+    
+3. List of all agents' names. 
+
+select distinct(agent_name) from agent_performance;
+
+4. Find out agent average rating.
+
+select agent_name,round(avg(average_rating),1)
+    > from agent_performance group by agent_name;
+    
+5. Total working days for each agents 
+
+select agent_name, count(distinct ag_date) as work_days
+    > from agent_performance
+    > group by agent_name;
+
+6. Total query that each agent have taken 
+
+select agent_name, SUM(total_chats) as total_queries
+    > from agent_performance
+    > group by agent_name;
+
+7. Total Feedback that each agent have received 
+
+select agent_name, SUM(total_feedback) as total_feedbacks
+    > from agent_performance
+    > group by agent_name;
+
+8. Agent name who have average rating between 3.5 to 4 
+
+select agent_name, round(AVG(average_rating),1) as avg_rating
+    > from agent_performance
+    > group by agent_name
+    > having round(AVG(average_rating),1) > 3.4 and round(AVG(average_rating),1) < 4.1
+    > order by avg_rating desc;
+    
+9. Agent name who have rating less than 3.5 
+
+select agent_name, round(AVG(average_rating),1) as avg_rating
+    > from agent_performance
+    > group by agent_name
+    > having round(AVG(average_rating),1) < 3.5
+    > order by avg_rating;
+
+10. Agent name who have rating more than 4.5 
+
+select agent_name, round(AVG(average_rating),1) as avg_rating
+    > from agent_performance
+    > group by agent_name
+    > having round(AVG(average_rating),1) > 4.5
+    > order by avg_rating desc;
+    
+11. How many feedback agents have received more than 4.5 average
+
+select agent_name, sum(total_feedback) as sum_fdbk
+    > from agent_performance
+    > where average_rating > 4.5
+    > group by agent_name;
+    
+12. average weekly response time for each agent 
+
+select agent_name, weekofyear(ag_date) as weekday, AVG(average_response_time) as avg_response
+    > from agent_performance
+    > group by agent_name, weekofyear(ag_date);
+    
+13. average weekly resolution time for each agents 
+
+select agent_name, weekofyear(ag_date) as weekday, AVG(average_resolution_time) as avg_resolution
+    > from agent_performance
+    > group by agent_name, weekofyear(ag_date);
+    
+14. Find the number of chat on which they have received a feedback 
+
+select agent_name, count(total_chats) as no_of_chats
+    > from agent_performance
+    > where total_feedback <> 0
+    > group by agent_name;
+    
+15. Total contribution hour for each and every agents weekly basis 
+
+select agent_name, weekofyear(ag_date) as weekday, (sum(duration)/60)/60 as working_hours
+    > from agent_loging_report
+    > group by agent_name, weekofyear(ag_date);
+
+16. Perform inner join, left join and right join based on the agent column and after joining the table export that data into your local system.
+
+
+17. Perform partitioning on top of the agent column and then on top of that perform bucketing for each partitioning.
