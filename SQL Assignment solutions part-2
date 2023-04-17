@@ -367,6 +367,84 @@
     else round(num,1) end as median
     from cte2
     where rownumber between cnt/2 and (cnt/2)+1;
+    
+41. with cte as (
+    select e.department_id,s.employee_id,s.amount,date_format(s.pay_date,'%y-%m')as pay_month,avg(s.amount) over(partition by s.pay_date) avg_salary from salary s join employee e on s.employee_id = e.employee_id
+    ),
+    cte2 as (
+    select cte.department_id,cte.employee_id,cte.amount,cte.pay_month,cte.avg_salary,avg(cte.amount) over (partition by cte.department_id,pay_month) avg_dept from cte
+    )
+    select pay_month,department_id,case 
+	when avg(avg_salary) > avg(avg_dept) then 'lower'
+	when avg(avg_salary) < avg(avg_dept) then 'heigher'
+	else 'same'
+    end as comparison
+    from cte2
+    group by department_id,pay_month;
+    
+42. select install_dt,count(*) as installs,round(sum(retention)/count(*),2) as Day1_retention 
+    from
+    (select player_id,min(event_date) as install_dt,
+    case when date_add(min(event_date),interval 1 day) in (select event_date from activity where player_id = a.player_id) 
+     then 1 
+     else 0
+    end as retention
+    from activity a
+    group by player_id) act
+    group by install_dt;
+    
+43.  WITH tb1 AS (
+     SELECT first_player AS player, first_score as score
+     FROM Matches
+     UNION ALL
+     SELECT second_player, second_score
+     FROM Matches
+     ),
+     tb2 AS (
+     SELECT p.player_id, p.group_id, SUM(tb1.score) AS tp
+     FROM Players p
+     LEFT JOIN tb1
+     ON p.player_id = tb1.player
+     GROUP BY p.player_id, p.group_id
+     )
+     SELECT group_id, player_id
+     FROM (
+     SELECT player_id, group_id,
+        ROW_NUMBER() OVER (PARTITION BY group_id ORDER BY tp DESC, player_id) AS r
+     FROM tb2
+     ) tb3
+     WHERE r = 1;
+     
+44. select student_id,student_name
+    from student 
+    where student_id in 
+    (select student_id from exam 
+    where student_id not in
+    (select student_id
+    from exam 
+    where (exam_id,score) in 
+    (select exam_id,min(score) as score
+    from exam group by exam_id
+    having min(score)
+    union 
+    select exam_id,max(score) as score
+    from exam group by exam_id
+    having max(score))));
 
+45. select student_id,student_name
+    from student 
+    where student_id in 
+    (select student_id from exam 
+    where student_id not in
+    (select student_id
+    from exam 
+    where (exam_id,score) in 
+    (select exam_id,min(score) as score
+    from exam group by exam_id
+    having min(score)
+    union 
+    select exam_id,max(score) as score
+    from exam group by exam_id
+    having max(score))));
    
     
