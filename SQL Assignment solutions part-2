@@ -447,4 +447,43 @@
     from exam group by exam_id
     having max(score))));
    
+46. select a.user_id,a.song_id,(a.time_period + ifnull(h.song_plays,0)) as song_plays
+    from (select user_id,song_id,listen_time,
+    case when listen_time < '2022-08-05' then 1
+    else 0
+    end as time_period
+    from songs_weekly 
+    having time_period > 0) a left join songs_history h on a.song_id = h.song_id;
+    
+47. with cte as(select count(t.email_id) as confirm_email
+    from emails e right join texts t
+    on e.email_id = t.email_id
+    where signup_action = 'Confirmed')
+    select round(cast(cte.confirm_email as decimal(7,2))/(select count(email_id) from texts),2) as confirm_rate
+    from cte;
+    
+48. WITH tweet_per_day_by_user AS
+    (
+    SELECT user_id, tweet_date, COUNT(*) as tweet_count
+    FROM tweets
+    group by user_id,tweet_date
+    )
+    SELECT user_id, tweet_date,
+    ROUND(AVG(tweet_count) OVER( PARTITION BY user_id ORDER BY tweet_date ROWS BETWEEN 2 PRECEDING and CURRENT ROW ),2) as rolling_avg_3d
+    FROM tweet_per_day_by_user;
+    
+49. 
+
+50. WITH profile_with_max_company_follower AS 
+    (
+    SELECT pp.profile_id,pp.name,pp.followers,cp.name AS company_name,cp.followers AS company_follower,
+    max(cp.followers) OVER(PARTITION BY pp.profile_id) as max_company_follower
+    FROM personal_profiles pp JOIN employee_company ec ON pp.profile_id = ec.personal_profile_id
+    JOIN company_pages cp ON cp.company_id = ec.company_id
+    ORDER BY pp.name
+    )
+    SELECT DISTINCT profile_id
+    FROM profile_with_max_company_follower
+    WHERE followers > max_company_follower
+    ORDER BY profile_id;
     
