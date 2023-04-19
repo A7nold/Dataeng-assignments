@@ -183,5 +183,44 @@ select agent_name, weekofyear(ag_date) as weekday, (sum(duration)/60)/60 as work
 
 16. Perform inner join, left join and right join based on the agent column and after joining the table export that data into your local system.
 
+inner join
+select a.agent_name, weekofyear(a.ag_date) as weekday, (sum(a.duration)/60)/60 as working_hours
+    > ,sum(p.total_chats) as total_chats from agent_loging_report a join agent_performance p on a.agent_name = p.agent_name
+    > group by a.agent_name,weekofyear(a.ag_date);
+    
+left join
+select a.agent_name, weekofyear(a.ag_date) as weekday, (sum(a.duration)/60)/60 as working_hours
+    > ,nvl(sum(p.total_chats),0) as total_chats from agent_loging_report a left join agent_performance p on a.agent_name = p.agent_name
+    > group by a.agent_name,weekofyear(a.ag_date);
+    
+right join
+select a.agent_name, weekofyear(a.ag_date) as weekday, nvl((sum(a.duration)/60)/60,0) as working_hours
+    > ,nvl(sum(p.total_chats),0) as total_chats from agent_loging_report a right join agent_performance p on a.agent_name = p.agent_name
+    > group by a.agent_name,weekofyear(a.ag_date);
 
 17. Perform partitioning on top of the agent column and then on top of that perform bucketing for each partitioning.
+
+set dynamic partiton properties below:
+
+set hive.exec.dynamic.partition=true;
+set hive.exec.dynamic.patition.mode=nonstrict; 
+
+bucket table:
+create table partition_bucketed_loging
+(
+    sl_no int,
+    ag_date date,
+    login_time string,
+    logout_time string,
+    duration string
+)
+partitioned by (agent_name string)
+clustered by(sl_no)
+into 4 buckets
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+inserting records;
+
+insert overwrite table partition_bucketed_loging partition(agent_name) select sl_no, ag_date, login_time, logout_time, duration, agent_name from agent_loging_report_bkp;
