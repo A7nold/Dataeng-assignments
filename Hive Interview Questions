@@ -1,0 +1,143 @@
+1. What is the definition of Hive? What is the present version of Hive?
+ans: Hive is a data warehouse which uses sql like analytical query language on structured data which is build on top of hadoop.
+Hive present version is 3.1.3 released on April 2022.
+
+2. Is Hive suitable to be used for OLTP systems? Why?
+ans: It does does not support OLTP systems as it does not support insert update though its suitable for OLAP.
+
+3. How is HIVE different from RDBMS? Does hive support ACID
+transactions. If not then give the proper reason.
+ans: Hive uses structured query language and it can have varying schema with properties automation partition which different in case of RDBMS.
+Hive supports ACID transaction when data stored in orc format marked as transaction table.
+
+4. Explain the hive architecture and the different components of a Hive
+architecture?
+ans:
+Hive architecture has four main components, these main components also have sub components:
+Main and sub components-
+1) Hive client - 
+*) thrift client - can serve requests from thrift client, 
+*) JDBC client - for connection with Java APP,
+*) ODBC client - for connection with open database
+2) Hive service - Hive server 2 - enables clients to submit queries for execution,
+*) driver- creates session , 
+*) compliler - executes query(forms DAG), 
+*) optimizer - performs transformation of the DAG,
+*) metastore - stores metadata info.
+3) Processing and resource management - Map reduce and YARN
+4) Distributed storage - HDFS
+
+5. Mention what Hive query processor does? And Mention what are the
+components of a Hive query processor?
+ans: Hive query processor creates a graph out of the Sql like query written.
+Components:
+Parse and Semantic Analysis (ql/parse)
+Metadata Layer (ql/metadata)
+Type Interfaces (ql/typeinfo)
+Sessions (ql/session)
+Map/Reduce Execution Engine (ql/exec)
+Plan Components (ql/plan)
+Hive Function Framework (ql/udf)
+Tools (ql/tools)
+Optimizer (ql/optimizer)
+
+6. What are the three different modes in which we can operate Hive?
+ans: 
+* Local mode: In Hive local mode, Map Reduce jobs related to Hive run locally on a user machine. This is the default mode in which Hadoop uses local file system.
+* Distributed Mode: In this mode, Hive as well as Hadoop is running in a fully distributed mode. NameNode, DataNode, JobTracker, TaskTracker etc run on different machines in this mode.
+* Pseudo-distributed Mode: This is the mode used by developers to test the code before deploying to production. In this mode, all the daemons run on same virtual machine. With this mode, we can quickly write scripts and test on limited data sets.
+
+7. Features and Limitations of Hive.
+ans: Features:
+Scalable
+Fast
+Can process large datasets
+Processed data stored in hdfs and schema stored in DB.
+Limitations:
+Hive doesn't support OLTP. Hive supports Online Analytical Processing (OLAP), but not Online Transaction Processing (OLTP).
+It doesn't support subqueries.
+It has a high latency.
+Hive tables don't support delete or update operations.
+
+8. How to create a Database in HIVE?
+ans: Create database DB;
+
+9. How to create a table in HIVE?
+ans: Create table table_name(
+ID int,
+Name string
+) row format delimited
+fields terminated by ',';
+
+10.What do you mean by describe and describe extended and describe
+formatted with respect to database and table.
+ans: 
+Tables:
+* Describe: shows list of columns 
+* Describe extended: shows list of columns,metadata of table 
+* Describe formatted: shows list of columns,metadata of table in tabular format
+Database:
+* Describe: shows name of db,comments, root file location 
+* Describe extended: shows name of db,comments, root file location , dbproperties
+
+11.How to skip header rows from a table in Hive?
+ans: tblproperties("skip.header.line.count"="1");
+
+12.What is a hive operator? What are the different types of hive operators?
+ans: hive operators are logic building blocks.
+operators:
+Relational,logical,arithmetic and complex.
+
+13.Explain about the Hive Built-In Functions
+ans: 
+THey are similar to sql functions:
+round(a),double(a),ceil(a),rand(),concat(A,B)
+
+14. Write hive DDL and DML commands.
+ans: 
+DDL -
+create,alter,describe
+DML-
+select,insert
+
+15.Explain about SORT BY, ORDER BY, DISTRIBUTE BY and
+CLUSTER BY in Hive.
+ans: 
+* order by- ascending or descending sorting of data globally in one reducer.
+* sort by - sorted data per reducer not globally sorted.
+* distribute by - distribute the input rows among reducers acc to key
+* clusterf by - distribute by + sort by 
+-> data partititoned in reducer  acc. to key
+-> data sorted in each reducer data acc. to key
+
+16.Difference between "Internal Table" and "External Table" and Mention
+when to choose “Internal Table” and “External Table” in Hive?
+ans: 
+* Internal Table - Data stored in Hive's data warehouse 
+When dropping table both data and metadata are deleted
+Default table in Hive
+* External Table - When you get data from HDFS or any external source
+When dropping the table only metdata is deleted
+External table is like a pointer to data in external source.
+
+Use external table when you have data in an external source and you do not want data to be drop even after drop table.
+Use Internal table when you want Hive to manage data.
+
+17.Where does the data of a Hive table get stored?
+ans: Data is stored in Data warehouse directory of Hive and metdata is store in metastore.
+
+18.Is it possible to change the default location of a managed table?
+ans: Yes, you can change the location of a managed table by using the LOCATION '' syntax.
+
+19.What is a metastore in Hive? What is the default database provided by
+Apache Hive for metastore?
+ans: Metastore - saves metdata of table , like the no. of columns, partitions etc.
+default database provided by Apache Hive for metastore is derbyDB.
+
+20.Why does Hive not store metadata information in HDFS?
+ans: Because Hive stores metadata in RDBMS and not in HDFS as RDBMS read/writes are faater.
+
+21.What is a partition in Hive? And Why do we perform partitioning in
+Hive?
+ans: Dividing the table in parts based on a column.
+This is done as the query time is fast as data is stored in slices and easy to differntiate baased on uniqueness of data.
