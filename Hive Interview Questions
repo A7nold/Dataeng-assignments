@@ -320,30 +320,91 @@ ans:
 A processing cost is their while creating indexes as values in the columns need to be arranged on which the indexes are created.
 
 61.Give the command to see the indexes on a table.
+ans: show index on table_name;
 
 62. Explain the process to access subdirectories recursively in Hive queries.
+ans: set mapred.input.dir.recursive = true
+
 63.If you run a select * query in Hive, why doesn't it run MapReduce?
+ans: As this is equivalent to a fetch task and reading the entire file.
+
 64.What are the uses of Hive Explode?
+ans: Explodes array to multiple rows.
+
 65. What is the available mechanism for connecting applications when we
 run Hive as a server?
-66.Can the default location of a managed table be changed in Hive?
-67.What is the Hive ObjectInspector function?
-68.What is UDF in Hive?
-69.Write a query to extract data from hdfs to hive.
-70.What is TextInputFormat and SequenceFileInputFormat in hive.
-71.How can you prevent a large job from running for a long time in a hive?
-72.When do we use explode in Hive?
-73.Can Hive process any type of data formats? Why? Explain in very detail
+ans: Thrift Client,JDBC driver and ODBC Driver
 
+66.Can the default location of a managed table be changed in Hive?
+ans: LOCATION '' can be used.
+
+67.What is the Hive ObjectInspector function?
+ans: It helps to analyze the structure of individual columns and rows and provides access to the complex objects that are stored within the database.
+
+68.What is UDF in Hive?
+ans: user defined function UDF is created with a Java program to address a specific function that is not part of the existing 
+Hive functions.
+
+69.Write a query to extract data from hdfs to hive.
+ans: load data inpath 'path' into table table_name
+
+70.What is TextInputFormat and SequenceFileInputFormat in hive.
+ans:SequenceFileInputFormat - It is the type of flatfile which consists of binary key value pairs.
+ combines small files and stores it as a large file
+ TextInputFormat - It can load csv types of files.
+ 
+71.How can you prevent a large job from running for a long time in a hive?
+ans: By setting hive.mapred.mode = strict. In this mapreduce exceutes in strict mode.
+
+72.When do we use explode in Hive?
+ans: When you want to expand nested array.
+
+73.Can Hive process any type of data formats? Why? Explain in very detail
+ans: Hive supports only textfile,sequencefile,ORC and recordfile
 74.Whenever we run a Hive query, a new metastore_db is created. Why?
+ans: property is set to auto create.
+You will have to change that in the configuration file , the property being:
+javax.jdo.option.ConnectionURL
+with the default value:
+jdbc:derby:;databaseName=metastore_db;create=true
+
 75.Can we change the data type of a column in a hive table? Write a
 complete query.
+ans: ALTER TABLE table_name CHANGE column_name column_name new_datatype; 
+
 76.While loading data into a hive table using the LOAD DATA clause, how
 do you specify it is a hdfs file and not a local file ?
+ans:
+for local: load data local inpath ''
+for hdfs: load data inpath ''
+
 77.What is the precedence order in Hive configuration?
+ans: 
+Hive set command
+CMD line
+hive-site.xml
+hive-default.xml
+hadoop-site.xml
+hadoop-site.xml
+
 78.Which interface is used for accessing the Hive metastore?
+ans: WebHcat API
+
 79.Is it possible to compress json in the Hive external table ?
+ans: you can using Gzip
+
 80.What is the difference between local and remote metastores?
+ans: 
+local - metastore Runs with JVM (in which hive runs)
+remote- metastore Runs ona different machine than JVM (in which hive runs)
+
 81.What is the purpose of archiving tables in Hive?
+ans:  archiving Hive tables only helps reduce the number of files that make for easier management of data.
+
 82.What is DBPROPERTY in Hive?
+ans: Mentions details about the database built by user.
+
 83.Differentiate between local mode and MapReduce mode in Hive.
+ans: 
+Mapreduce - queries exceuted on Hadoop cluster
+Local - queries executed on same single machine,without need of hadoop cluster.
