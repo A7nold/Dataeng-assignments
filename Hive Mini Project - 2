@@ -212,16 +212,224 @@ no_tickets_without_address
 Part-II: Aggregation tasks
 
 1.) How often does each violation code occur? (frequency of violation codes - find the top 5)
+query: select count(Violation_Code) as frequency_of_violation,Violation_Code from parking_violations_issued_2017 group by Violation_Code order by frequency_of_violation desc limit 5;
+output:
+frequency_of_violation  violation_code
+76296   21
+66095   36
+53784   38
+47178   14
+31856   20
+
 2.) How often does each vehicle body type get a parking ticket? How about the vehicle make? (find the top 5 for both)
+query a: select Vehicle_Body_Type,count(summons_number)as frequency_of_getting_parking_ticket  from challenge.parking_violations_issued_2017 group by Vehicle_Body_Type order by frequency_of_getting_parking_ticket desc limit 5;
+output:
+vehicle_body_type       frequency_of_getting_parking_ticket
+SUBN    187288
+4DSD    153968
+VAN     71768
+DELV    35600
+SDN     19241
+
+query b: select Vehicle_make,count(summons_number)as frequency_of_getting_parking_ticket from challenge.parking_violations_issued_2017 group by Vehicle_make order by frequency_of_getting_parking_ticket desc limit 5;
+output:
+vehicle_make    frequency_of_getting_parking_ticket
+FORD    63184
+TOYOT   59910
+HONDA   53975
+NISSA   45343
+CHEVR   35307
+
 3.) A precinct is a police station that has a certain zone of the city under its command. Find the (5 highest) frequencies of:
       a.) Violating Precincts (this is the precinct of the zone where the violation occurred)
+      query: select Violation_Precinct,count(*) as IssuedTicket from parking_violations_issued_2017 group by  Violation_Precinct order by IssuedTicket desc limit 6;
+      output:
+      violation_precinct      issuedticket
+      19      27130
+      14      20289
+      1       17464
+      18      16930
+      114     14647
+      
       b.) Issuer Precincts (this is the precinct that issued the ticket)
+      query: select Issuer_Precinct,count(*) as IssuedTicket from parking_violations_issued_2017 group by Issuer_Precinct order by IssuedTicket desc limit 6;
+      output:
+      issuer_precinct issuedticket
+      19      26391
+      14      19968
+      1       16872
+      18      16331
+      114     14323
+      
 4.) Find the violation code frequency across 3 precincts which have issued the most number of tickets - do these precinct zones have an exceptionally high frequency of certain violation codes?
-5.) Find out the properties of parking violations across different times of the day: The Violation Time field is specified in a strange format. Find a way to make this into a time attribute that you can use to divide into groups.
-6.) Divide 24 hours into 6 equal discrete bins of time. The intervals you choose are at your discretion. For each of these groups, find the 3 most commonly occurring violations
-7.) Now, try another direction. For the 3 most commonly occurring violation codes, find the most common times of day (in terms of the bins from the previous part)
-8.) Let’s try and find some seasonality in this data
-      a.) First, divide the year into some number of seasons, and find frequencies of tickets for each season. (Hint: A quick Google search reveals the following seasons in NYC: Spring(March, April, March); Summer(June, July, August); Fall(September, October, November); Winter(December, January, February))
-      b.)Then, find the 3 most common violations for each of these seasons.
+a) Top 3 precints with most number of tickets:
+query: select Issuer_Precinct, count(*) as TicketsIssued from parking_violations_issued_2017  group by Issuer_Precinct order by TicketsIssued desc limit 4;
+output:
+issuer_precinct ticketsissued
+19      26391
+14      19968
+1       16872
 
-Note: Please ensure you make necessary optimizations to your queries like selecting the appropriate table format, using partitioned/bucketed tables. Marks will be awarded for keeping the performance also in mind.
+b) Violation code frequency of issuer_precint 19
+query: select Violation_Code, count(*) as TicketsIssued from parking_violations_issued_2017 where Issuer_Precinct=19 group by Violation_Code order by TicketsIssued desc limit 7;
+output:
+violation_code  ticketsissued
+46      4707
+37      3649
+38      3574
+14      2888
+21      2842
+20      1479
+40      1070
+
+c) Violation code frequency of issuer_precint 14
+query: select Violation_Code, count(*) as TicketsIssued from parking_violations_issued_2017 where Issuer_Precinct=14 group by Violation_Code order by TicketsIssued desc limit 7;
+output:
+violation_code  ticketsissued
+14      4395
+69      2997
+31      2279
+47      1855
+42      986
+46      734
+19      702
+
+d) Violation code frequency of issuer_precint 1
+query: select Violation_Code, count(*) as TicketsIssued from parking_violations_issued_2017 where Issuer_Precinct=1 group by Violation_Code order by TicketsIssued desc limit 7;
+output:
+violation_code  ticketsissued
+14      3821
+16      1871
+20      1604
+46      1303
+38      869
+17      793
+37      647
+
+5.) Find out the properties of parking violations across different times of the day: The Violation Time field is specified in a strange format. Find a way to make this into a time attribute that you can use to divide into groups.
+query: select from_unixtime(unix_timestamp(concat(violation_time,'M'), 'HHmma'),"HH:mma") as date_data from parking_violations_issued_2017 limit 2;
+output:
+date_data
+10:18AM
+11:16AM
+
+6.) Divide 24 hours into 6 equal discrete bins of time. The intervals you choose are at your discretion. For each of these groups, find the 3 most commonly occurring violations
+query for 6 equal discrete bins of time:
+create view vw_parking_violations_2017_partitioned_bins as 
+SELECT Summons_Number, Violation_Time, Issuer_Precinct, 
+case 
+when substring(Violation_Time,1,2) in ('00','01','02','03','12') and upper(substring(Violation_Time,-1))='A' then 1 
+when substring(Violation_Time,1,2) in ('04','05','06','07') and upper(substring(Violation_Time,-1))='A' then 2 
+when substring(Violation_Time,1,2) in ('08','09','10','11') and upper(substring(Violation_Time,-1))='A' then 3 
+when substring(Violation_Time,1,2) in ('12','00','01','02','03') and upper(substring(Violation_Time,-1))='P' then 4 
+when substring(Violation_Time,1,2) in ('04','05','06','07') and upper(substring(Violation_Time,-1))='P' then 5 
+when substring(Violation_Time,1,2) in ('08','09','10','11') and upper(substring(Violation_Time,-1))='P'then 6 
+else null end as Violation_Time_bin,Violation_Code 
+from parking_violations_issued_2017  
+where Violation_Time is not null;
+
+bin 1 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 1 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+21      3660
+40      2584
+14      1547
+
+bin 2 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 2 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+14      7250
+40      6403
+21      5669
+
+bin 3 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 3 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+21      59465
+36      37767
+38      17587
+
+bin 4 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 4 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+36      28600
+38      23877
+37      16777
+
+bin 5 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 5 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+38      10148
+14      7609
+37      6944
+
+bin 6 query:
+select Violation_Code,count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Time_bin == 6 group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+violation_code  ticketsissued
+7       2602
+40      2159
+14      2091
+
+7.) Now, try another direction. For the 3 most commonly occurring violation codes, find the most common times of day (in terms of the bins from the previous part)
+query: select Violation_Time_bin, count(*) TicketsIssued from vw_parking_violations_2017_partitioned_bins where Violation_Code in (21,38,36) 
+       group by Violation_Time_bin order by TicketsIssued desc limit 3;
+output:
+Violation_Time_bin  TicketsIssued
+3       116785
+4       76701
+5       18437
+
+8.) Let’s try and find some seasonality in this data
+a.) First, divide the year into some number of seasons, and find frequencies of tickets for each season. (Hint: A quick Google search reveals the following seasons in NYC: Spring(March, April, March); Summer(June, July, August); Fall(September, October, November); Winter(December, January, February))
+query: create view vw_tickets_issued_2017_bins as 
+select Violation_Code , Issuer_Precinct, 
+case 
+when MONTH(from_unixtime(unix_timestamp(Issue_Date,'mm/dd/yyyy'),'yyyy-mm-dd')) in (3,4,5) then 'spring' 
+when MONTH(from_unixtime(unix_timestamp(Issue_Date,'mm/dd/yyyy'),'yyyy-mm-dd')) in (6,7,8) then 'summer' 
+when MONTH(from_unixtime(unix_timestamp(Issue_Date,'mm/dd/yyyy'),'yyyy-mm-dd')) in (9,10,11) then 'autumn' 
+when MONTH(from_unixtime(unix_timestamp(Issue_Date,'mm/dd/yyyy'),'yyyy-mm-dd')) in (1,2,12) then 'winter' 
+else 'unknown' end  as season from parking_violations_issued_2017;
+
+query: select season, count(*) as TicketsIssued from vw_tickets_issued_2017_bins group by season order by TicketsIssued desc;
+output:
+season  ticketsissued
+spring  285863
+winter  169474
+summer  84564
+autumn  0
+
+b.)Then, find the 3 most common violations for each of these seasons.
+spring:
+query : select Violation_Code, count(*) as TicketsIssued from vw_tickets_issued_2017_bins where season = 'spring' group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+Violation_Code  TicketsIssued
+21      40045
+36      34354
+38      27001
+
+winter:
+query : select Violation_Code, count(*) as TicketsIssued from vw_tickets_issued_2017_partitioned_bins where season = 'winter' group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+Violation_Code TicketsIssued
+21      23684
+36      22084
+38      18450
+
+summer:
+query: select Violation_Code, count(*) as TicketsIssued from vw_tickets_issued_2017_partitioned_bins where season = 'summer' group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+Violation_Code  TicketsIssued
+21      12565
+36      9655
+38      8331
+
+autumn:
+query: select Violation_Code, count(*) as TicketsIssued from vw_tickets_issued_2017_partitioned_bins where  season = 'autumn' group by Violation_Code order by TicketsIssued desc limit 3;
+output:
+No data for autumn season
