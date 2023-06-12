@@ -70,3 +70,47 @@
      END AS triangle_type
     FROM triangles;  
 
+6.  select ceil(avg(salary) - avg(replace(salary, '0', ''))) from EMPLOYEES;
+
+7.  select MAX(salary*months), COUNT(*) from Employee where (salary * months) = (select MAX(salary * months) from Employee);
+
+8.  (
+       SELECT CONCAT(NAME, '(', SUBSTRING(Occupation, 1, 1), ')') as THETEXT, '1' as SELECTNUMBER
+       FROM OCCUPATIONS
+    )
+    UNION ALL 
+    (
+       SELECT CONCAT('There are total ', COUNT(*),' ', Occupation, (IF (COUNT(*) > 1, 's',''))) as THETEXT, '2' as SELECTNUMBER
+       FROM OCCUPATIONS GROUP BY Occupation
+    )
+    ORDER BY SELECTNUMBER ASC, THETEXT ASC;
+    
+9.  select * from occupations o ;
+
+    (
+       SELECT CONCAT(NAME, '(', SUBSTRING(Occupation, 1, 1), ')') as THETEXT
+       FROM OCCUPATIONS
+       order by 1
+    )
+    UNION ALL 
+    (
+       SELECT CONCAT('There are total ', COUNT(*),' ', Occupation, (IF (COUNT(*) > 1, 's',''))) as THETEXT
+       FROM OCCUPATIONS GROUP BY Occupation
+    );
+    
+10. WITH serialized_ocp AS(
+     SELECT
+      name,
+      occupation,
+      row_number() over(partition by occupation order by name) as serial
+     FROM
+     occupations
+    )
+    SELECT MAX(CASE WHEN occupation = 'Doctor' THEN name END) AS Doctor,
+           MAX(CASE WHEN occupation = 'Professor' THEN name END) AS Professor,
+           MAX(CASE WHEN occupation = 'Singer' THEN name END) AS Singer,
+           MAX(CASE WHEN occupation = 'Actor' THEN name END) AS Actor
+    FROM serialized_ocp
+    GROUP BY serial;
+    
+11. 
