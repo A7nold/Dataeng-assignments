@@ -113,4 +113,28 @@
     FROM serialized_ocp
     GROUP BY serial;
     
-11. 
+11. SELECT n,
+    CASE  WHEN p IS NULL THEN 'Root'
+         WHEN n IN ( SELECT p FROM bst) THEN 'Inner'
+         ELSE 'Leaf'
+    END as node_type
+    FROM bst
+    ORDER BY n;
+    
+12. SELECT c.company_code, c.founder, COUNT(DISTINCT e.lead_manager_code), COUNT(DISTINCT e.senior_manager_code), COUNT(DISTINCT e.manager_code), COUNT(DISTINCT e.employee_code) 
+    FROM Company c JOIN Employee e ON c.company_code = e.company_code GROUP BY c.company_code, c.founder ORDER BY c.company_code;
+    
+13. select listagg(Prime_Number,'&') within group(order by Prime_Number)
+    from (select L Prime_Number from
+     (select Level L 
+     from Dual
+     connect by Level <= 1000),
+     (select Level M
+     from Dual
+     connect by Level <= 1000)
+     where M <= L
+     group by L
+     having count(case when L/M = trunc(L/M) then 'Y' end) = 2
+     order by L);
+     
+14. 
