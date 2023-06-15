@@ -137,4 +137,193 @@
      having count(case when L/M = trunc(L/M) then 'Y' end) = 2
      order by L);
      
-14. 
+14. WITH RECURSIVE numbers AS(
+    SELECT 1 AS n, '*' AS star
+    UNION
+    SELECT n+1,'*' AS star FROM numbers WHERE n < 20
+    )
+    SELECT
+    GROUP_CONCAT(n1.star SEPARATOR '') AS stars
+    FROM  numbers n1 JOIN numbers n2 ON n1.n >= n2.n
+    GROUP BY n1.n;
+
+15. WITH RECURSIVE numbers AS(
+    SELECT 1 AS n, '*' AS star
+    UNION
+    SELECT n+1,'*' AS star FROM numbers WHERE n < 20
+    ),
+    multiline_star AS(
+    SELECT
+    GROUP_CONCAT(n1.star SEPARATOR '') AS stars
+    FROM numbers n1 JOIN numbers n2 ON n1.n >= n2.n
+    GROUP BY n1.n
+    )
+    SELECT
+    GROUP_CONCAT(stars SEPARATOR '\n') AS pattern
+    FROM multiline_star;
+
+16. SELECT name
+    FROM students
+    WHERE marks > 75
+    ORDER BY RIGHT(name, 3),id;
+
+17. SELECT name
+    FROM employee
+    ORDER BY name;
+
+18. SELECT name
+    FROM employee
+    WHERE salary > 2000 AND months < 10
+    ORDER BY employee_id;
+
+19. SELECT a,b,c,
+    CASE 
+    WHEN a + b <= c OR b + c <= a OR c + a <= b THEN 'Not A Triangle'
+    WHEN a = b AND b = c THEN 'Equilateral'
+    WHEN a = b THEN 'Isosceles'
+    ELSE 'Scalene'
+    END AS triangle_type
+    FROM triangles;
+
+20. SELECT DATE_FORMAT(transaction_date,'%Y') AS year, product_id, spend AS curr_year_spend,
+    LAG(spend) OVER(ORDER BY DATE_FORMAT(transaction_date,'%Y')) AS prev_year_spend,
+    ROUND((spend - LAG(spend) OVER(ORDER BY DATE_FORMAT(transaction_date,'%Y')))
+    *100.00/LAG(spend) OVER(ORDER BY DATE_FORMAT(transaction_date,'%Y')),2) AS yoy_rate
+    FROM user_transactions
+    ORDER BY year;
+
+21. SELECT item_type,SUM(square_footage) AS total_sqft,COUNT(*) AS item_count
+    FROM inventory
+    GROUP BY item_type;
+
+22. SELECT 
+    EXTRACT(MONTH FROM curr_month.event_date) AS mth, 
+    COUNT(DISTINCT curr_month.user_id) AS monthly_active_users 
+    FROM user_actions AS curr_month
+    WHERE EXISTS ( SELECT last_month.user_id 
+                   FROM user_actions AS last_month
+                   WHERE last_month.user_id = curr_month.user_id
+                   AND EXTRACT(MONTH FROM last_month.event_date) =
+                   EXTRACT(MONTH FROM curr_month.event_date - interval '1 month'))
+    AND EXTRACT(MONTH FROM curr_month.event_date) = 7
+    AND EXTRACT(YEAR FROM curr_month.event_date) = 2022
+    GROUP BY EXTRACT(MONTH FROM curr_month.event_date);
+
+23. WITH RECURSIVE cte AS 
+    (
+    SELECT searches, num_users as NU FROM search_frequency
+
+    UNION ALL
+  
+    SELECT cte.searches, cte.NU - 1
+    FROM cte WHERE NU > 0
+    )
+    select PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY searches) AS median FROM cte
+    WHERE nu > 0;
+
+24. WITH payment_status AS (
+   SELECT
+   advertiser.user_id,
+   advertiser.status,
+   payment.paid
+   FROM advertiser
+   LEFT JOIN daily_pay AS payment
+   ON advertiser.user_id = payment.user_id
+
+   UNION
+
+   SELECT
+   payment.user_id,
+   advertiser.status,
+   payment.paid
+   FROM daily_pay AS payment
+   LEFT JOIN advertiser
+   ON advertiser.user_id = payment.user_id
+   )
+
+   SELECT
+   user_id,
+   CASE WHEN paid IS NULL THEN 'CHURN'
+  	WHEN status != 'CHURN' AND paid IS NOT NULL THEN 'EXISTING'
+  	WHEN status = 'CHURN' AND paid IS NOT NULL THEN 'RESURRECT'
+  	WHEN status IS NULL THEN 'NEW'
+   END AS new_status
+   FROM payment_status
+   ORDER BY user_id;
+
+25. WITH up_time_by_server AS
+    (
+    SELECT  server_id, session_status, status_time,
+    CASE
+    WHEN session_status = 'stop' THEN TIMESTAMPDIFF(SECOND, status_time,LAG(status_time) OVER(PARTITION BY server_id ORDER BY status_time))/3600
+    END as up_time
+    FROM server_utilization
+    )
+    SELECT
+    ROUND(sum(up_time)/24)
+    FROM up_time_by_server
+    WHERE up_time is not null;
+
+26. WITH trx_with_repeadted AS
+    (
+    SELECT  credit_card_id, amount, transaction_timestamp, 
+    count(*) OVER( PARTITION BY credit_card_id,amount ORDER BY transaction_timestamp RANGE BETWEEN INTERVAL '10' MINUTE PRECEDING AND CURRENT ROW
+    ) AS moving_count
+    FROM 
+    transactions
+    )
+    SELECT COUNT(*) as payment_count
+    FROM trx_with_repeadted
+    WHERE moving_count > 1;
+
+27. SELECT ROUND((COUNT(
+    CASE
+    WHEN lower(o.status) <> 'completed successfully' THEN o.order_id
+    END
+    )*100.00/COUNT(o.order_id)),2) as bad_experience_pct
+    FROM orders o
+    JOIN customers c ON c.customer_id = o.customer_id
+    WHERE TIMESTAMPDIFF(DAY,o.order_timestamp,c.signup_timestamp) < 14 AND DATE_FORMAT(c.signup_timestamp,'%Y-%m') = '2022-06';
+
+28. SELECT gender, day, sum(score_points) OVER(PARTITION BY gender ORDER BY day) AS total
+    FROM scores;
+
+29. WITH receiver_caller_calls AS(
+    SELECT caller_id AS caller_receiver_id, duration
+    FROM calls
+    UNION ALL
+    SELECT callee_id AS caller_receiver_id, duration
+    FROM calls
+    ),
+    call_duration_avg AS(
+    SELECT DISTINCT cn.name, avg(c.duration) OVER() as global_average, avg(c.duration) OVER(PARTITION BY cn.name) as country_average
+    FROM person p JOIN country cn 
+    ON  CAST(SUBSTRING_INDEX(p.phone_number, '-', 1) AS UNSIGNED) =  CAST(cn.country_code AS UNSIGNED)
+    JOIN receiver_caller_calls c
+    ON c.caller_receiver_id = p.id
+    )
+    SELECT name
+    FROM call_duration_avg
+    WHERE country_average > global_average;
+
+30. with recursive rec_cte as
+    (
+    select num,frequency,1 asc cnt
+    from Numbers 
+    UNION
+    select num,frequency,cnt+1 as cnt 
+    from rec_cte
+    where cnt < frequency
+    ),
+    med_cte as 
+    (
+    SELECT num,frequency,cnt,
+    row_number() over (order by num) row_num,
+    count(*) over () tot_count
+    from rec_cte
+    )
+    select case when MOD(tot_count,2) = 0 then round(avg(num),1) 
+    else round(num,1) end as median
+    from med_cte 
+    where row_num BETWEEN 
+    tot_count/2 and tot_count/2+1;
