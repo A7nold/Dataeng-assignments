@@ -1,10 +1,8 @@
-This is a real time dataset of the ineuron technical consultant team. You have to perform hive analysis on this given dataset.
 
+SOURCE:
 Download Dataset 1 - https://drive.google.com/file/d/1WrG-9qv6atP-W3P_-gYln1hHyFKRKMHP/view
 
 Download Dataset 2 - https://drive.google.com/file/d/1-JIPCZ34dyN6k9CqJa-Y8yxIGq6vTVXU/view
-
-Note: both files are csv files. 
 
 
 1. Create a schema based on the given dataset
@@ -221,6 +219,5 @@ row format delimited
 fields terminated by ','
 stored as textfile;
 
-inserting records;
-
+inserting records:
 insert overwrite table partition_bucketed_loging partition(agent_name) select sl_no, ag_date, login_time, logout_time, duration, agent_name from agent_loging_report_bkp;
