@@ -1,0 +1,3 @@
+Stock_start_price 
+Stock_end_price
+stock_volume
